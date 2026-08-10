@@ -5,13 +5,13 @@
 }
 
 @media (max-width: 768px) {
-  .informacoes.ativa {
+  .informacao.ativa {
     display: flex;
     flex-direction: column;
     align-items: center;
   }
 
-  .informacoes .descricao {
+  .informacao .descricao {
     width: 60%;
     text-align: center;
   }
@@ -22,7 +22,7 @@
     padding: 40px;
   }
 
-  .informacoes .descricao {
+  .informacao .descricao {
     width: 100%;
   }
 

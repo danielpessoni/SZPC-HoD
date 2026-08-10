@@ -25,21 +25,28 @@ main {
 }
 
 .informacoes {
+	width: 100%;
+	min-height: 500px;
+}
+
+.informacao {
 	display: none;
 }
 
-.informacoes.ativa {
+.informacao.ativa {
 	display: block;
 }
 
 .conteudo {
 	display: flex;
 	flex-direction: column;
-	justify-content: space-evenly;
+	justify-content: flex-end;
+	gap: 60px;
 	min-height: 100vh;
+	padding: 80px 0 40px;
 }
 
-.informacoes h1 {
+.informacao h1 {
 	font-size: 35px;
 	color: #ffffff;
 	margin-bottom: 80px;
@@ -53,13 +60,13 @@ main {
 	font-display: swap;
 }
 
-.informacoes .descricao {
+.informacao .descricao {
 	width: 49%;
 	font-size: 24px;
 	color: #ffffff;
 	line-height: 40px;
 	max-height: 300px;
-	overflow: auto;
+	overflow: hidden;
 	padding-right: 15px;
 }
 
@@ -74,13 +81,17 @@ main {
 	width: 15px;
 	height: 15px;
 	border-radius: 50%;
-	border: 2px solid transparent;
+	border: 2px solid #ffffff;
 	cursor: pointer;
-	border-color: #ffffff;
 }
 
 .botoes-carrossel .botao.selecionado {
 	background-color: #1d8346;
+}
+
+.botoes-carrossel .botao:focus-visible {
+	outline: 3px solid #ffffff;
+	outline-offset: 4px;
 }
 
 .imagem {
