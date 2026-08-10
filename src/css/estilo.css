@@ -70,7 +70,71 @@ main {
 	padding-right: 15px;
 }
 
+
+/* ===========================
+   Controles do carrossel
+=========================== */
+
+.controles-carrossel {
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+	grid-template-rows: auto auto;
+	align-items: center;
+	justify-items: center;
+	gap: 10px 25px;
+}
+
+.botao-anterior {
+	grid-column: 1;
+	grid-row: 1;
+}
+
+.botao-proximo {
+	grid-column: 3;
+	grid-row: 1;
+}
+
+.botao-anterior,
+.botao-proximo {
+	padding: 10px 18px;
+	border: 2px solid #ffffff;
+	border-radius: 6px;
+	background-color: rgba(0, 0, 0, 0.45);
+	color: #ffffff;
+	font-family: "Poppins", sans-serif;
+	font-size: 14px;
+	font-weight: 600;
+	cursor: pointer;
+	transition:
+		background-color 0.2s ease,
+		transform 0.2s ease;
+}
+
+.botao-anterior:hover,
+.botao-proximo:hover {
+	background-color: rgba(255, 255, 255, 0.2);
+	transform: translateY(-2px);
+}
+
+.botao-anterior:active,
+.botao-proximo:active {
+	transform: translateY(0);
+}
+
+.botao-anterior:focus-visible,
+.botao-proximo:focus-visible {
+	outline: 3px solid #ffffff;
+	outline-offset: 4px;
+}
+
+
+/* ===========================
+   Indicadores
+=========================== */
+
 .botoes-carrossel {
+	grid-column: 2;
+	grid-row: 1;
 	display: flex;
 	justify-content: center;
 	gap: 20px;
@@ -83,6 +147,17 @@ main {
 	border-radius: 50%;
 	border: 2px solid #ffffff;
 	cursor: pointer;
+	transition:
+		background-color 0.2s ease,
+		transform 0.2s ease;
+}
+
+.botoes-carrossel .botao:hover {
+	transform: scale(1.2);
+}
+
+.botoes-carrossel .botao:active {
+	transform: scale(0.9);
 }
 
 .botoes-carrossel .botao.selecionado {
@@ -93,6 +168,26 @@ main {
 	outline: 3px solid #ffffff;
 	outline-offset: 4px;
 }
+
+
+/* ===========================
+   Contador
+=========================== */
+
+.contador-carrossel {
+	grid-column: 1 / -1;
+	grid-row: 2;
+	color: #ffffff;
+	font-size: 16px;
+	font-weight: 600;
+	text-align: center;
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+
+/* ===========================
+   Imagens
+=========================== */
 
 .imagem {
 	width: 100vw;
@@ -106,6 +201,11 @@ main {
 	animation: mudarImagem 0.7s;
 }
 
+
+/* ===========================
+   Animações
+=========================== */
+
 @keyframes mudarImagem {
 	from {
 		opacity: 0.85;
@@ -115,6 +215,11 @@ main {
 		opacity: 1;
 	}
 }
+
+
+/* ===========================
+   Overlay
+=========================== */
 
 main::after {
 	content: "";

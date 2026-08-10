@@ -69,6 +69,10 @@ const carrossel = document.querySelector(".carrossel");
 const informacoes = document.querySelector(".informacoes");
 const botoesCarrossel = document.querySelector(".botoes-carrossel");
 
+const botaoAnterior = document.querySelector(".botao-anterior");
+const botaoProximo = document.querySelector(".botao-proximo");
+const contadorCarrossel = document.querySelector(".contador-carrossel");
+
 
 /* ===========================
    Renderização inicial
@@ -78,6 +82,8 @@ function renderizarCarrossel() {
   renderizarImagens();
   renderizarInformacoes();
   renderizarBotoes();
+
+  configurarControles();
 
   trocarSlide(indiceAtual);
 }
@@ -126,7 +132,7 @@ function renderizarInformacoes() {
 
 
 /* ===========================
-   Renderização dos botões
+   Renderização dos indicadores
 =========================== */
 
 function renderizarBotoes() {
@@ -149,6 +155,47 @@ function renderizarBotoes() {
 
 
 /* ===========================
+   Configuração dos controles
+=========================== */
+
+function configurarControles() {
+  botaoAnterior.addEventListener("click", slideAnterior);
+  botaoProximo.addEventListener("click", proximoSlide);
+
+  document.addEventListener("keydown", controlarTeclado);
+}
+
+
+/* ===========================
+   Controle pelo teclado
+=========================== */
+
+function controlarTeclado(evento) {
+  switch (evento.key) {
+    case "ArrowLeft":
+      evento.preventDefault();
+      slideAnterior();
+      break;
+
+    case "ArrowRight":
+      evento.preventDefault();
+      proximoSlide();
+      break;
+
+    case "Home":
+      evento.preventDefault();
+      trocarSlide(0);
+      break;
+
+    case "End":
+      evento.preventDefault();
+      trocarSlide(dragoes.length - 1);
+      break;
+  }
+}
+
+
+/* ===========================
    Troca de slide
 =========================== */
 
@@ -158,6 +205,7 @@ function trocarSlide(indice) {
   atualizarImagem();
   atualizarInformacao();
   atualizarBotoes();
+  atualizarContador();
 }
 
 
@@ -179,16 +227,20 @@ function atualizarImagem() {
 =========================== */
 
 function atualizarInformacao() {
-  const informacoesDragoes = document.querySelectorAll(".informacao");
+  const informacoesDragoes =
+    document.querySelectorAll(".informacao");
 
   informacoesDragoes.forEach((informacao, indice) => {
-    informacao.classList.toggle("ativa", indice === indiceAtual);
+    informacao.classList.toggle(
+      "ativa",
+      indice === indiceAtual
+    );
   });
 }
 
 
 /* ===========================
-   Atualização dos botões
+   Atualização dos indicadores
 =========================== */
 
 function atualizarBotoes() {
@@ -197,7 +249,10 @@ function atualizarBotoes() {
   botoes.forEach((botao, indice) => {
     const selecionado = indice === indiceAtual;
 
-    botao.classList.toggle("selecionado", selecionado);
+    botao.classList.toggle(
+      "selecionado",
+      selecionado
+    );
 
     botao.setAttribute(
       "aria-current",
@@ -208,11 +263,25 @@ function atualizarBotoes() {
 
 
 /* ===========================
+   Atualização do contador
+=========================== */
+
+function atualizarContador() {
+  const numeroAtual = String(indiceAtual + 1).padStart(2, "0");
+  const numeroTotal = String(dragoes.length).padStart(2, "0");
+
+  contadorCarrossel.textContent =
+    `${numeroAtual} / ${numeroTotal}`;
+}
+
+
+/* ===========================
    Próximo slide
 =========================== */
 
 function proximoSlide() {
-  const proximoIndice = (indiceAtual + 1) % dragoes.length;
+  const proximoIndice =
+    (indiceAtual + 1) % dragoes.length;
 
   trocarSlide(proximoIndice);
 }
@@ -224,7 +293,8 @@ function proximoSlide() {
 
 function slideAnterior() {
   const indiceAnterior =
-    (indiceAtual - 1 + dragoes.length) % dragoes.length;
+    (indiceAtual - 1 + dragoes.length) %
+    dragoes.length;
 
   trocarSlide(indiceAnterior);
 }
@@ -235,47 +305,3 @@ function slideAnterior() {
 =========================== */
 
 renderizarCarrossel();
-
-
-
-// const botoesCarrossel = document.querySelectorAll(".botao");
-// const imagens = document.querySelectorAll(".imagem");
-// const informacoes = document.querySelectorAll(".informacoes");
-
-// botoesCarrossel.forEach((botao, indice) => {
-//   botao.addEventListener("click", () => {
-//     desativarBotaoSelecionado();
-//     marcarBotaoSelecionado(botao);
-//     esconderImagemAtiva();
-//     mostrarImagemDeFundo(indice);
-//     esconderInformacoesAtivas();
-//     mostrarInformacoes(indice);
-//   });
-// });
-
-// function marcarBotaoSelecionado(botao) {
-//     botao.classList.add("selecionado");
-// }
-
-// function mostrarInformacoes(indice) {
-//   informacoes[indice].classList.add("ativa");
-// }
-
-// function esconderInformacoesAtivas() {
-//   const informacoesAtiva = document.querySelector(".informacoes.ativa");
-//   informacoesAtiva.classList.remove("ativa");
-// }
-
-// function mostrarImagemDeFundo(indice) {
-//   imagens[indice].classList.add("ativa");
-// }
-
-// function esconderImagemAtiva() {
-//   const imagemAtiva = document.querySelector(".ativa");
-//   imagemAtiva.classList.remove("ativa");
-// }
-
-// function desativarBotaoSelecionado() {
-//   const botaoSelecionado = document.querySelector(".selecionado");
-//   botaoSelecionado.classList.remove("selecionado");
-// }
