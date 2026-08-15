@@ -3,6 +3,7 @@
 =========================== */
 
 import { inicializarCarrossel } from "./carrossel.js";
+import { inicializarTouch } from "./touch.js";
 
 
 /* ===========================
@@ -10,3 +11,4 @@ import { inicializarCarrossel } from "./carrossel.js";
 =========================== */
 
 inicializarCarrossel();
+inicializarTouch();
