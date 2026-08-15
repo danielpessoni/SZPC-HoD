@@ -1,4 +1,16 @@
 /* ===========================
+   Configuração do autoplay
+=========================== */
+
+// Tempo de inatividade antes de ativar o autoplay.
+const TEMPO_INATIVIDADE = 10000; //45 segundos = 45000
+
+// Intervalo entre as trocas automáticas de slide.
+const INTERVALO_AUTOPLAY = 5000; // 15 segundos = 15000
+
+
+
+/* ===========================
    Dados dos dragões
 =========================== */
 
@@ -62,6 +74,14 @@ let indiceAtual = 0;
 
 
 /* ===========================
+   Estado do autoplay
+=========================== */
+
+let temporizadorInatividade;
+let intervaloAutoplay;
+
+
+/* ===========================
    Elementos da página
 =========================== */
 
@@ -86,6 +106,8 @@ function renderizarCarrossel() {
   configurarControles();
 
   trocarSlide(indiceAtual);
+
+  iniciarContagemInatividade();
 }
 
 
@@ -142,10 +164,14 @@ function renderizarBotoes() {
     botao.classList.add("botao");
 
     botao.type = "button";
-    botao.setAttribute("aria-label", `Mostrar ${dragao.nome}`);
+    botao.setAttribute(
+      "aria-label",
+      `Mostrar ${dragao.nome}`
+    );
     botao.setAttribute("aria-current", "false");
 
     botao.addEventListener("click", () => {
+      registrarInteracao();
       trocarSlide(indice);
     });
 
@@ -159,8 +185,15 @@ function renderizarBotoes() {
 =========================== */
 
 function configurarControles() {
-  botaoAnterior.addEventListener("click", slideAnterior);
-  botaoProximo.addEventListener("click", proximoSlide);
+  botaoAnterior.addEventListener("click", () => {
+    registrarInteracao();
+    slideAnterior();
+  });
+
+  botaoProximo.addEventListener("click", () => {
+    registrarInteracao();
+    proximoSlide();
+  });
 
   document.addEventListener("keydown", controlarTeclado);
 }
@@ -174,24 +207,77 @@ function controlarTeclado(evento) {
   switch (evento.key) {
     case "ArrowLeft":
       evento.preventDefault();
+      registrarInteracao();
       slideAnterior();
       break;
 
     case "ArrowRight":
       evento.preventDefault();
+      registrarInteracao();
       proximoSlide();
       break;
 
     case "Home":
       evento.preventDefault();
+      registrarInteracao();
       trocarSlide(0);
       break;
 
     case "End":
       evento.preventDefault();
+      registrarInteracao();
       trocarSlide(dragoes.length - 1);
       break;
   }
+}
+
+
+/* ===========================
+   Registro de interação
+=========================== */
+
+function registrarInteracao() {
+  desativarAutoplay();
+  iniciarContagemInatividade();
+}
+
+
+/* ===========================
+   Contagem de inatividade
+=========================== */
+
+function iniciarContagemInatividade() {
+  clearTimeout(temporizadorInatividade);
+
+  temporizadorInatividade = setTimeout(() => {
+    ativarAutoplay();
+  }, TEMPO_INATIVIDADE);
+}
+
+
+/* ===========================
+   Ativação do autoplay
+=========================== */
+
+function ativarAutoplay() {
+  if (intervaloAutoplay) {
+    return;
+  }
+
+  intervaloAutoplay = setInterval(() => {
+    proximoSlide();
+  }, INTERVALO_AUTOPLAY);
+}
+
+
+/* ===========================
+   Desativação do autoplay
+=========================== */
+
+function desativarAutoplay() {
+  clearInterval(intervaloAutoplay);
+
+  intervaloAutoplay = null;
 }
 
 
@@ -217,7 +303,10 @@ function atualizarImagem() {
   const imagens = document.querySelectorAll(".imagem");
 
   imagens.forEach((imagem, indice) => {
-    imagem.classList.toggle("ativa", indice === indiceAtual);
+    imagem.classList.toggle(
+      "ativa",
+      indice === indiceAtual
+    );
   });
 }
 
@@ -267,8 +356,13 @@ function atualizarBotoes() {
 =========================== */
 
 function atualizarContador() {
-  const numeroAtual = String(indiceAtual + 1).padStart(2, "0");
-  const numeroTotal = String(dragoes.length).padStart(2, "0");
+  const numeroAtual = String(
+    indiceAtual + 1
+  ).padStart(2, "0");
+
+  const numeroTotal = String(
+    dragoes.length
+  ).padStart(2, "0");
 
   contadorCarrossel.textContent =
     `${numeroAtual} / ${numeroTotal}`;
