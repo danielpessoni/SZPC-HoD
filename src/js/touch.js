@@ -1,5 +1,5 @@
 /* ===========================
-Módulos
+   Módulos
 =========================== */
 
 import {
@@ -33,12 +33,9 @@ let posicaoInicialY = 0;
 =========================== */
 
 export function inicializarTouch() {
-    if (!dispositivoPossuiTouch()) {
-        return;
-    }
-
-    ocultarBotoesNavegacao();
+    atualizarInterfaceTouch();
     configurarTouch();
+    configurarDeteccaoTouch();
 }
 
 
@@ -80,11 +77,44 @@ function configurarTouch() {
 
 
 /* ===========================
+   Monitoramento do dispositivo
+=========================== */
+
+function configurarDeteccaoTouch() {
+    window.addEventListener(
+        "resize",
+        atualizarInterfaceTouch
+    );
+}
+
+
+/* ===========================
+   Atualização da interface
+=========================== */
+
+function atualizarInterfaceTouch() {
+    const possuiTouch = dispositivoPossuiTouch();
+
+    const botaoAnterior =
+        document.querySelector(".botao-anterior");
+
+    const botaoProximo =
+        document.querySelector(".botao-proximo");
+
+    if (!botaoAnterior || !botaoProximo) {
+        return;
+    }
+
+    botaoAnterior.hidden = possuiTouch;
+    botaoProximo.hidden = possuiTouch;
+}
+
+
+/* ===========================
    Início do touch
 =========================== */
 
 function registrarInicioTouch(evento) {
-
     const toque = evento.changedTouches[0];
 
     posicaoInicialX = toque.clientX;
@@ -97,7 +127,6 @@ function registrarInicioTouch(evento) {
 =========================== */
 
 function registrarFimTouch(evento) {
-
     const toque = evento.changedTouches[0];
 
     const deslocamentoX =
@@ -127,20 +156,4 @@ function registrarFimTouch(evento) {
 
     registrarInteracao(proximoSlide);
     slideAnterior();
-}
-
-
-/* ===========================
-   Controles de navegação
-=========================== */
-
-function ocultarBotoesNavegacao() {
-    const botaoAnterior =
-        document.querySelector(".botao-anterior");
-
-    const botaoProximo =
-        document.querySelector(".botao-proximo");
-
-    botaoAnterior.hidden = true;
-    botaoProximo.hidden = true;
 }
